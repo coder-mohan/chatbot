@@ -10,6 +10,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// CORS setup: allow frontend domain
+app.use(cors({
+  origin: process.env.FRONTEND_URL, // e.g., https://chatbot-meqq.vercel.app
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
