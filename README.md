@@ -40,9 +40,4 @@ npm run dev
 - Frontend deployed on **Vercel**
 - GitHub-based CI/CD with auto-deploy on push
 
-## Assignment Compliance
-✔ React + Express  
-✔ JWT Authentication  
-✔ Secure LLM Integration  
-✔ Error Handling & Retry Logic  
-✔ Deployed Application  
+
