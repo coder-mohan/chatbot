@@ -19,13 +19,13 @@ app.use(cors({
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.log("❌ MongoDB Error:", err));
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log("MongoDB Error:", err));
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 
 app.listen(process.env.PORT, () =>
-  console.log("🚀 Backend running on port", process.env.PORT)
+  console.log("Backend running on port", process.env.PORT)
 );

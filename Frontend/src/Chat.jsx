@@ -39,11 +39,26 @@ export default function Chat() {
         { role: "ai", text: res.data.reply },
       ]);
     } catch (err) {
+      // 🔐 Token expired or invalid → force re-login
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        alert("Session expired. Please login again.");
+        window.location.reload();
+        return;
+      }
+
+      // 🌐 Other server / network errors
+      const msg =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        "Server error. Please try again later.";
+
       setMessages((prev) => [
         ...prev,
-        { role: "ai", text: "⚠️ Error: Could not get response." },
+        { role: "ai", text: `⚠️ ${msg}` },
       ]);
     }
+
 
     setLoading(false);
   }
