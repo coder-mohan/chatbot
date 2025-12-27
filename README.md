@@ -27,8 +27,7 @@ MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
 GEMINI_API_KEY=your_gemini_api_key
 FRONTEND_URL= https://chatbot-meqq-git-main-mohan-sharmas-projects.vercel.app/ 
-shell
-Copy code
+
 
 ## Run Locally
 npm install
