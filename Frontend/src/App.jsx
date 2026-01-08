@@ -4,10 +4,8 @@ import Register from "./Register";
 import Chat from "./Chat";
 
 export default function App() {
-  // ✅ KEEP this
   const [view, setView] = useState("login");
 
-  // ✅ REPLACED login logic
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
