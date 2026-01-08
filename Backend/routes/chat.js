@@ -1,17 +1,20 @@
 const express = require("express");
-const router = express.Router();
-// const axios = require("axios");
-const auth = require("../middleware/auth");
 const OpenAI = require("openai");
 
+const router = express.Router();
 
-// const GEMINI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+const azureai = new OpenAI({
+  apiKey: process.env.AZURE_OPENAI_API_KEY,
+  baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT_NAME}`,
+  defaultQuery: {
+    "api-version": process.env.AZURE_OPENAI_API_VERSION,
+  },
+  defaultHeaders: {
+    "api-key": process.env.AZURE_OPENAI_API_KEY,
+  },
 });
 
-router.post("/generate", auth, async (req, res) => {
+router.post("/generate", async (req, res) => {
   const { message } = req.body;
 
   if (!message) {
@@ -19,24 +22,17 @@ router.post("/generate", auth, async (req, res) => {
   }
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "user", content: message }
-      ],
+    const completion = await azureai.chat.completions.create({
+      model: process.env.AZURE_OPENAI_DEPLOYMENT_NAME,
+      messages: [{ role: "user", content: message }],
     });
 
-    const reply = completion.choices[0].message.content;
-    res.json({ reply });
+    res.json({ reply: completion.choices[0].message.content });
 
   } catch (err) {
-    console.error("OpenAI API Error:", err.message);
-    res.status(500).json({
-      error: "Failed to generate response from OpenAI",
-    });
+    console.error("Azure OpenAI Error:", err);
+    res.status(500).json({ error: "Failed to generate response" });
   }
 });
-
-
 
 module.exports = router;

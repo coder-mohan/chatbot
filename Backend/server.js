@@ -7,25 +7,35 @@ const authRoutes = require("./routes/auth");
 const chatRoutes = require("./routes/chat");
 
 const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Backend is running");
+});
+
+/* ===== Middleware ===== */
 app.use(express.json());
-app.use(cors());
 
-// CORS setup: allow frontend domain
-app.use(cors({
-  origin: process.env.FRONTEND_URL, // e.g., https://chatbot-meqq.vercel.app
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+app.use(
+  cors({
+    // origin: process.env.FRONTEND_URL,  
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
+/* ===== MongoDB ===== */
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log("MongoDB Error:", err));
+  .catch((err) => console.error("MongoDB Error:", err));
 
-// Routes
+/* ===== Routes ===== */
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 
-app.listen(process.env.PORT, () =>
-  console.log("Backend running on port", process.env.PORT)
+/* ===== Server ===== */
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () =>
+  console.log(`Backend running on port ${PORT}`)
 );
